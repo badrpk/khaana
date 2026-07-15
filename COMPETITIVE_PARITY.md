@@ -14,4 +14,12 @@
 | Reviews | `POST /reviews` |
 | Capabilities probe | `GET /capabilities` |
 
-Run: `python3 src/app.py` → http://127.0.0.1:8765
+
+## v3 payments & gaps
+
+See [GAP_ANALYSIS.md](GAP_ANALYSIS.md). Multi-rail: Stripe, JazzCash, EasyPaisa, UPaisa, Coinbase, Binance, Monero, COD, bank.
+
+```bash
+python3 src/app.py
+# GET /pricing  GET /gap-analysis  POST /checkout with payment_method=stripe|jazzcash|...
+```
