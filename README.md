@@ -1,20 +1,28 @@
-# Khaana
+# Khaana 🍛
 
-Multi-vendor food marketplace API (discovery, carts, kitchen ops) distinct from Laiba Badar brand delivery.
+**Multi-vendor food marketplace API** for Pakistan — discovery, menus, cart, orders.
 
-## Quick start
+Distinct from **Laiba Badar** (single food brand + delivery app).
+
+## Download & run
 
 ```bash
+git clone https://github.com/badrpk/khaana.git
+cd khaana
 python3 src/app.py
-# open http://127.0.0.1:8765
 ```
 
-## Tests
+## API
 
-```bash
-python3 -m pytest -q || python3 -c "import pathlib,importlib.util; p=pathlib.Path('src/app.py'); s=importlib.util.spec_from_file_location('app',p); m=importlib.util.module_from_spec(s); s.loader.exec_module(m); print('ok')"
-```
+| Method | Path | Description |
+|--------|------|-------------|
+| GET | `/health` | Health |
+| GET | `/vendors` | List kitchens |
+| GET | `/vendors/{id}/menu` | Menu |
+| GET | `/cart?user=` | Cart |
+| POST | `/cart/add` | `{user, vendor_id, item_id, qty}` |
+| POST | `/order` | `{user}` place order |
 
-## Portfolio
+## Contribute
 
-See [PORTFOLIO.md](PORTFOLIO.md) for how this product differs from other badrpk repositories.
+Public — [CONTRIBUTING.md](CONTRIBUTING.md) · [COMMUNITY.md](COMMUNITY.md)
