@@ -1,28 +1,19 @@
 # Khaana 🍛
 
-**Multi-vendor food marketplace API** for Pakistan — discovery, menus, cart, orders.
+**Multi-vendor food marketplace API** — competitive with Foodpanda / Uber Eats core flows.
 
-Distinct from **Laiba Badar** (single food brand + delivery app).
-
-## Download & run
+## Run
 
 ```bash
-git clone https://github.com/badrpk/khaana.git
-cd khaana
 python3 src/app.py
+# http://127.0.0.1:8765/capabilities
 ```
 
-## API
+## Highlights
 
-| Method | Path | Description |
-|--------|------|-------------|
-| GET | `/health` | Health |
-| GET | `/vendors` | List kitchens |
-| GET | `/vendors/{id}/menu` | Menu |
-| GET | `/cart?user=` | Cart |
-| POST | `/cart/add` | `{user, vendor_id, item_id, qty}` |
-| POST | `/order` | `{user}` place order |
+- Geo + cuisine vendor discovery with ETA
+- Cart, coupons, multi-rail payments (COD/card/JazzCash/EasyPaisa)
+- Order lifecycle tracking (placed → delivered)
+- Reviews and dish search
 
-## Contribute
-
-Public — [CONTRIBUTING.md](CONTRIBUTING.md) · [COMMUNITY.md](COMMUNITY.md)
+See [COMPETITIVE_PARITY.md](COMPETITIVE_PARITY.md).
