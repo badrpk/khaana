@@ -5,6 +5,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from http_util import JsonAPI, serve, uid, iso
 import payments as pay
+import auth as authmod
 
 VENDORS = [
     {"id": "v1", "name": "Karachi Biryani House", "city": "Karachi", "lat": 24.8607, "lng": 67.0011,
@@ -59,6 +60,12 @@ def haversine(lat1, lng1, lat2, lng2):
 class H(JsonAPI):
     def do_GET(self):
         path, q = self.parse()
+        if path.startswith("/auth"):
+            # headers as dict
+            hdrs = {k: v for k, v in self.headers.items()}
+            code, body = authmod.handle_auth_request("GET", path, {}, hdrs, product="khaana")
+            return self._send(code, body)
+
         if path in ("/", "/health"):
             return self._send(200, {"ok": True, "service": "khaana", "version": "3.0.0",
                 "parity_target": "Foodpanda / Uber Eats", "payments": True,
@@ -68,7 +75,7 @@ class H(JsonAPI):
             return self._send(200, {"ok": True, "competitor": "Foodpanda", "features": [
                 "geo_search", "cuisine_filter", "ratings", "eta", "cart", "coupons", "checkout",
                 "order_tracking", "reviews", "scheduled_orders", "favorites", "reorder", "driver_tip",
-                "pro_plan", "stripe", "jazzcash", "easypaisa", "crypto", "undercut_pricing"]})
+                "pro_plan", "stripe", "signup", "login", "otp", "oauth_google", "oauth_facebook", "jazzcash", "easypaisa", "crypto", "undercut_pricing"]})
         if path == "/pricing":
             return self._send(200, {"ok": True, **pay.pricing_for("khaana"), "menu_note": "Item prices already ~25-40% under typical FP-listed restaurant markup demos"})
         if path == "/payments/rails":
@@ -145,6 +152,12 @@ class H(JsonAPI):
         self._send(404, {"ok": False})
 
     def do_POST(self):
+        _path_early = (self.path.split("?")[0].rstrip("/") or "/")
+        if _path_early.startswith("/auth"):
+            hdrs = {k: v for k, v in self.headers.items()}
+            body = self._read_json() if hasattr(self, "_read_json") else self._read()
+            code, resp = authmod.handle_auth_request("POST", _path_early, body if isinstance(body, dict) else {}, hdrs, product="khaana")
+            return self._send(code, resp)
         path, _ = self.parse()
         body = self._read_json()
         if body.get("_error"): return self._send(400, {"ok": False, "error": "invalid_json"})
